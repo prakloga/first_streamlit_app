@@ -31,24 +31,37 @@ fruits_to_show = my_fruit_list.loc[fruits_selected]
 streamlit.dataframe(fruits_to_show)
 
 # New section to display fruityvice response
-streamlit.header('Fruityvice Fruit Advice!')
+#streamlit.header('Fruityvice Fruit Advice!')
 # Add a Text Entry Box and Send the Input to Fruityvice as Part of the API Call
-fruit_choice = streamlit.text_input('What fruit would you like infromation about?', 'Kiwi')
-streamlit.write('The user entered', fruit_choice)
+#fruit_choice = streamlit.text_input('What fruit would you like infromation about?', 'Kiwi')
+#streamlit.write('The user entered', fruit_choice)
 
 #import requests
 #fruityvice_response = requests.get("https://fruityvice.com/api/fruit/watermelon")
 #fruityvice_response = requests.get("https://fruityvice.com/api/fruit/" + "Kiwi")
-fruityvice_response = requests.get("https://fruityvice.com/api/fruit/" + fruit_choice)
+#fruityvice_response = requests.get("https://fruityvice.com/api/fruit/" + fruit_choice)
 #streamlit.text(fruityvice_response)
 #streamlit.text(fruityvice_response.json()) #Just writes the data to screen
-
 # Let's Get the Fruityvice Data Looking a Little Nicer
 # Take JSON version of response and normalize it
-fruityvice_normalized = pd.json_normalize(fruityvice_response.json())
+#fruityvice_normalized = pd.json_normalize(fruityvice_response.json())
 # Output it the screen as table
-streamlit.dataframe(fruityvice_normalized)
+#streamlit.dataframe(fruityvice_normalized)
 
+# New section to display fruityvice API response
+streamlit.header('Fruityvice Fruit Advice!')
+try:
+  fruit_choice = streamlit.text_input('What fruit would you like infromation about?')
+  if not fruit_choice:
+    streamlit.error("Please select a fruit to get information.")
+  else:
+    fruityvice_response = requests.get("https://fruityvice.com/api/fruit/" + fruit_choice)
+    fruityvice_normalized = pd.json_normalize(fruityvice_response.json())
+    streamlit.dataframe(fruityvice_normalized)
+ except URLError as e:
+  streamlit.error()
+
+    
 # Don't run anything past here while we troubleshoot
 streamlit.stop()
 
